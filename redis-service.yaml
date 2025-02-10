@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  selector:
+    app: redis # Redis Deployment의 selector matchLabels Pod와 연결
+  ports:
+    - protocol: TCP
+      port: 6379 # Service의 포트
+      targetPort: 6379 # Redis 컨테이너 내부 포트
+  clusterIP: None # Headless Service (StatefulSet 용)

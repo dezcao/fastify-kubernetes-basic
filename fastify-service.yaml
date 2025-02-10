@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastify-service
+spec:
+  selector:
+    app: fastify
+  ports:
+    - protocol: TCP
+      port: 3000 # 서비스 외부 포트
+      targetPort: 3000 # Fastify 컨테이너 내부 포트
+  type: NodePort # Minikube에서는 NodePort 사용

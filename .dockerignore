@@ -1,0 +1,6 @@
+node_modules
+dist
+npm-debug.log
+.DS_Store # Mac 사용자의 숨김파일. Windows 사용자는 필요 없는 옵션이긴 함.
+.git
+# .env # 환경 변수 파일 (보안 위험 방지) Docker 실행시, --env-file .env 할 것. Kubernetes 용으로는 복사해가도록 함.

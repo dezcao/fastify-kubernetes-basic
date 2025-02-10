@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastify-deployment
+spec:
+  replicas: 2 # Fastify 컨테이너 2개 실행
+  selector:
+    matchLabels:
+      app: fastify
+  template:
+    metadata:
+      labels:
+        app: fastify
+    spec:
+      containers:
+        - name: fastify
+          image: fastify-node-v1 # Fastify 컨테이너 이미지
+          imagePullPolicy: Never # Minikube 내부의 Docker 이미지를 사용하도록 설정
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REDIS_HOST
+              value: "redis" # redis-servie.yaml의 metadata.name을 설정
+            - name: REDIS_PORT
+              value: "6379"

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", // 최신 JavaScript(ESNext) 지원
+    "module": "NodeNext", // Node.js ESM 지원
+    "moduleResolution": "NodeNext", // Node.js의 ESM 방식으로 해석
+    "strict": true, // 타입 검사 활성화
+    "noImplicitAny": false, // any 허용. server.js에서 타입 사용 안했음. 스키마에만 적용할 예정.
+    "esModuleInterop": true, // CommonJS 모듈과 호환 가능
+    "skipLibCheck": true, // `node_modules` 타입 검사 생략
+    "forceConsistentCasingInFileNames": true, // 파일 대소문자 일관성 유지
+    "outDir": "./dist", // 컴파일된 JS 파일 저장 위치
+    "rootDir": "./src", // `src/` 폴더를 기준으로 빌드
+    "resolveJsonModule": true, // JSON 파일 import 가능
+    "allowJs": true, // 기존 JS 파일도 TypeScript 환경에서 허용
+    "checkJs": false, // JS 파일에서 타입 오류 검사 비활성화
+    "isolatedModules": true // Jest ESM 실행을 위해 필요
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "tests"]
+}
