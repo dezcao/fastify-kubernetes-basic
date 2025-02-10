@@ -1,7 +1,6 @@
 import { initMariadb } from "./mariadb.js";
 import { initPostgre } from "./postgre.js";
 import { initOracle } from "./oracle.js";
-const database = process.env.DATABASE_TYPE || "postgre"; // 기본값 PostgreSQL
 
 export default async function initDatabase(fastify) {
   const dbs = {
@@ -9,8 +8,10 @@ export default async function initDatabase(fastify) {
     postgre: initPostgre,
     oracle: initOracle,
   };
+  const database = process.env.DATABASE_TYPE; // 기본값 PostgreSQL
 
   console.log("현재 DATABASE_TYPE:", process.env.DATABASE_TYPE);
+  console.log("선택된 database:", database);
 
   if (!dbs[database]) {
     throw new Error(`Unsupported database: ${database}`);
@@ -25,12 +26,17 @@ export default async function initDatabase(fastify) {
       return;
     }
 
-    if (!fastify.db) {
-      console.log("⚡ 만약, Kubernetes 실행중이 아니라면, server.js에서 initRedis, initDatabase를 주석으로 할것. ⚡");
+    if (!fastify.dbPool) {
+      console.log(
+        "⚡ 만약, Kubernetes 실행중이 아니라면, server.js에서 initRedis, initDatabase를 주석으로 할것. ⚡"
+      );
       return;
     }
 
-    req.db = database === "postgre" ? await fastify.dbPool.connect() : await fastify.dbPool.getConnection();
+    req.db =
+      database === "postgre"
+        ? await fastify.dbPool.connect()
+        : await fastify.dbPool.getConnection();
 
     // 트랜잭션 기본 함수들을 빈함수로 초기화
     req.db.begin = async () => {};
@@ -40,7 +46,8 @@ export default async function initDatabase(fastify) {
     req.db.begin = async () => {
       if (database === "mariadb") return req.db.beginTransaction();
       if (database === "postgre") return req.db.query("BEGIN");
-      if (database === "oracle") return req.db.execute("BEGIN", [], { autoCommit: false });
+      if (database === "oracle")
+        return req.db.execute("BEGIN", [], { autoCommit: false });
     };
 
     req.db.commit = async () => {

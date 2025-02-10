@@ -12,6 +12,85 @@ npm install
 npm run dev
 ```
 
+- Kubernetes인 경우. (설치는 DockerOriginal.md, DockerKubernetes.md 참조)
+
+```sh
+# Minikube
+minikube start
+
+# redis
+kubectl apply -f redis-deployment.yaml
+kubectl get pods
+
+kubectl apply -f redis-service.yaml
+kubectl get services
+
+# mariadb
+kubectl apply -f mariadb-statefulset.yaml
+kubectl get pods
+
+kubectl apply -f mariadb-service.yaml
+kubectl get services
+
+# postgre
+# kubectl apply -f postgre-statefulset.yaml
+# kubectl apply -f postgre-service.yaml
+
+# fastify node.js App
+./deploy-fastify.sh
+kubectl get pods
+kubectl logs fastify-deployment-xxx-xxx
+```
+
+- Minikube 실행 예상 결과
+
+```
+😄  minikube v1.35.0 on Microsoft Windows 11 Home 10.0.26100.2894 Build 26100.2894
+✨  Using the docker driver based on existing profile
+👍  Starting "minikube" primary control-plane node in "minikube" cluster
+🚜  Pulling base image v0.0.46 ...
+🔄  Restarting existing docker container for "minikube" ...
+❗  Failing to connect to https://registry.k8s.io/ from inside the minikube container
+💡  To pull new external images, you may need to configure a proxy: https://minikube.sigs.k8s.io/docs/reference/networking/proxy/
+🐳  Preparing Kubernetes v1.32.0 on Docker 27.4.1 ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+    ▪ Using image docker.io/kubernetesui/dashboard:v2.7.0
+    ▪ Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
+💡  Some dashboard features require the metrics-server addon. To enable all features please run:
+
+        minikube addons enable metrics-server
+
+🌟  Enabled addons: default-storageclass, storage-provisioner, dashboard
+
+❗  C:\Program Files\Docker\Docker\resources\bin\kubectl.exe is version 1.30.5, which may have incompatibilities with Kubernetes 1.32.0.
+    ▪ Want kubectl v1.32.0? Try 'minikube kubectl -- get pods -A'
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+```
+
+- deploy-fastify.sh 실행 예상 결과
+
+```
+pod "fastify-deployment-bbd7c7d8c-7jxdz" deleted
+pod "fastify-deployment-bbd7c7d8c-b7t8t" deleted
+Fastify Deployment 다시 배포...
+deployment.apps/fastify-deployment unchanged
+Fastify Service 다시 배포...
+service/fastify-service unchanged
+Fastify 실행 상태 확인...
+NAME                                 READY   STATUS    RESTARTS   AGE
+fastify-deployment-bbd7c7d8c-5h2m8   1/1     Running   0          32s
+fastify-deployment-bbd7c7d8c-5lbcb   1/1     Running   0          32s
+Fastify 서비스 URL 확인:
+http://127.0.0.1:52713
+❗  Because you are using a Docker driver on windows, the terminal needs to be open to run it.
+```
+
+- Browser url test
+  - ex, Mariadb - /routes/mariadbCheck.js
+  1. /users
+  2. /add-user?name=John&email=john@example.com
+
 ## Tech Stack
 
 - Backend: Fastify (ESM, JSON Schema, Swagger, CORS, Helmet)

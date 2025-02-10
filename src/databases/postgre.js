@@ -1,20 +1,22 @@
 import pg from "pg";
 
 export async function initPostgre() {
-  const pool = new pg.Pool({
-    host: process.env.POSTGRE_HOST,
-    user: process.env.POSTGRE_USER,
-    password: process.env.POSTGRE_PASSWORD,
-    database: process.env.POSTGRE_DATABASE,
-    port: process.env.POSTGRE_PORT,
-    max: 10,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
-  });
+  let pool = null;
 
   // 연결 테스트 및 테스트 테이블 생성
   let client = null;
   try {
+    pool = new pg.Pool({
+      host: process.env.POSTGRE_HOST,
+      user: process.env.POSTGRE_USER,
+      password: process.env.POSTGRE_PASSWORD,
+      database: process.env.POSTGRE_DATABASE,
+      port: process.env.POSTGRE_PORT,
+      max: 10,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 2000,
+    });
+
     client = await pool.connect();
     const { rows } = await client.query("SELECT 1 AS val");
     console.log("PostgreSQL 연결 성공:", rows);
@@ -31,6 +33,7 @@ export async function initPostgre() {
     console.log("test_users 테이블이 확인되었습니다.");
   } catch (err) {
     console.error("PostgreSQL 연결 실패:", err);
+    pool = null;
   } finally {
     if (client) client.release();
   }

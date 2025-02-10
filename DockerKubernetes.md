@@ -81,6 +81,13 @@ minikube status
 kubectl get all -A
 ```
 
+- 기타
+
+```
+minikube stop
+minikube delete
+```
+
 ## Fastify + Redis + DB(Maria or Postgre)
 
 ### 관련파일 참조 바람.
@@ -126,12 +133,6 @@ kubectl apply -f postgre-service.yaml
 ./deploy-fastify.sh
 ```
 
-> Fastify 앱은, Docker hub 없이 로컬 소스를 기반으로 하고 있어 수정시 빌드 요청이 필요함.  
-> fastify-deployment.yaml - imagePullPolicy: Never 참조.  
-> 리눅스면 파일 실행 권한 확인 : ls -l deploy-fastify.sh  
-> 경고 메시지 : Because you are using a Docker driver on Windows...  
->  ➡ 실행 중인 터미널 닫으면, 동작을 멈출거다.
-
 - 명령어 예시
 
 ```
@@ -141,6 +142,12 @@ kubectl get services
 kubectl logs fastify-deployment-xxxxx
 kubectl describe pod mariadb-0
 ```
+
+> Fastify 앱은, Docker hub 없이 로컬 소스를 기반으로 하고 있어 수정시 빌드 요청이 필요함.  
+> fastify-deployment.yaml - imagePullPolicy: Never 참조.  
+> 리눅스면 파일 실행 권한 확인 : ls -l deploy-fastify.sh  
+> 경고 메시지 : Because you are using a Docker driver on Windows...  
+>  ➡ 실행 중인 터미널 닫으면, 동작을 멈출거다.
 
 예. 물리공간 삭제
 

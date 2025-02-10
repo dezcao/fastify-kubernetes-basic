@@ -1,18 +1,19 @@
 import mariadb from "mariadb";
 
 export async function initMariadb() {
-  const pool = mariadb.createPool({
-    host: process.env.MARIADB_HOST,
-    user: process.env.MARIADB_USER,
-    password: process.env.MARIADB_PASSWORD,
-    database: process.env.MARIADB_DATABASE,
-    port: process.env.MARIADB_PORT,
-    connectionLimit: 5,
-  });
-
-  // 연결 테스트 및 테스트 테이블 생성.
+  let pool = null;
   let conn = null;
+
   try {
+    pool = mariadb.createPool({
+      host: process.env.MARIADB_HOST,
+      user: process.env.MARIADB_USER,
+      password: process.env.MARIADB_PASSWORD,
+      database: process.env.MARIADB_DATABASE,
+      port: process.env.MARIADB_PORT,
+      connectionLimit: 5,
+    });
+
     conn = await pool.getConnection();
     const rows = await conn.query("SELECT 1 as val");
     console.log("MariaDB 연결 성공:", rows);
@@ -26,9 +27,11 @@ export async function initMariadb() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
     console.log("test_users 테이블이 확인되었습니다.");
   } catch (err) {
     console.error("MariaDB 연결 실패:", err);
+    pool = null;
   } finally {
     if (conn) conn.release();
   }
