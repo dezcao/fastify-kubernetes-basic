@@ -176,4 +176,4 @@ DESC test_users;
 
 ## CI/CD (예정)
 
-## Road Balancing (예정)
+## Load Balancing (예정)
